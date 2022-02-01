@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\SetController;
+use App\Http\Controllers\CollectionController;
+use App\Models\Set;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,5 +18,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', ['sets' => Set::all()]);
 });
+
+Route::resource('sets', SetController::class);
+Route::resource('collections', CollectionController::class);
+
+Route::post('/collections/{id}/upload-image',
+    [CollectionController::class, 'uploadImage'])->name('collections.uploadImage');
+Route::post('/collections/{id}/upload-documents',
+    [CollectionController::class, 'uploadDocuments'])->name('collections.uploadDocuments');
