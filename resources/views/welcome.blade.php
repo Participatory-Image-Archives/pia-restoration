@@ -25,7 +25,7 @@
                 <h2 class="text-2xl mt-2 mb-2">{{ $current }}</h2>
             @endif
             <li class="inline">
-                <x-links.default :label="$set->label" href="{{ route('sets.edit', [$set]) }}" class="mb-2 name"/>
+                <x-links.default :label="$set->label" href="{{ route('sets.edit', [$set]) }}" class="mb-2 label"/>
             </li>
         @endif
     @endforeach
