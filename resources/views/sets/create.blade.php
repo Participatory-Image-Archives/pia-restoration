@@ -4,7 +4,7 @@
 
 <div class="flex gap-10">
     <div class="w-1/3">
-        <h2 class="text-xl font-bold mb-8">1. Construct set</h2>
+        <h2 class="text-xl font-bold mb-8">1. Edit list of signatures</h2>
         <div>
             @include('sets.set-signatures')
         </div>

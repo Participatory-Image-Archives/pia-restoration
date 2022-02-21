@@ -4,7 +4,7 @@
 
 <div class="flex gap-10">
     <div class="w-1/3">
-        <h2 class="text-xl font-bold mb-8">1. Construct set</h2>
+        <h2 class="text-xl font-bold mb-8">1. Edit list of signatures</h2>
         <div>
             @include('sets.set-signatures')
         </div>
@@ -23,8 +23,8 @@
 
     </div>
 
-    <div class="w-2/3">
-        <h2 class="text-xl font-bold mb-8">3. Restoration Notes and Documents</h2>
+    <div class="w-2/3 border-l border-gray-300 pl-8">
+        <h2 class="text-xl font-bold mb-8">4. Add Notes and Documents</h2>
         @include('collections.view')
 
         <hr class="my-8">

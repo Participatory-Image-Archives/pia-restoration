@@ -1,11 +1,11 @@
-<h3 class="mb-2">Add range of signatures</h3>
+<h3 class="mb-2 text-xs">Add range of signatures</h3>
 <div class="flex gap-2">
     <span class="p-1">SGV_</span>
-    <input type="text" id="collection" placeholder="10P" class="border-b border-gray-300 p-1 w-20">
+    <input type="text" id="collection" placeholder="10P" class="border border-gray-300 p-1 w-20">
     <span class="p-1">_</span>
-    <input type="number" placeholder="1" min="0" max="99999" id="range_start" class="border-b border-gray-300 p-1 w-20">
+    <input type="number" placeholder="1" min="0" max="99999" id="range_start" class="border border-gray-300 p-1 w-20">
     <span class="p-1">bis</span>
-    <input type="number" placeholder="10" min="0" max="99999" id="range_end" class="border-b border-gray-300 p-1 w-20">
+    <input type="number" placeholder="10" min="0" max="99999" id="range_end" class="border border-gray-300 p-1 w-20">
     <button id="add_range" class="py-1 px-4 bg-black text-white text-xs rounded-full">Add</button>
 </div>
 
