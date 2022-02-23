@@ -38,7 +38,7 @@
                 <ul class="grid grid-cols-3 gap-2">
                 @foreach ($set->documents as $document)
                     <li class="mb-2">
-                        @if(preg_match('(\.jpg|\.png)', $document->file_name) === 1)
+                        @if(preg_match('(\.jpg|\.jpeg|\.png)', $document->file_name) === 1)
                             <a href="/{{ 'storage/' . $document->base_path . '/' . $document->file_name }}">
                                 <img src="/{{ 'storage/' . $document->base_path . '/' . $document->file_name }}" alt="{{ $document->file_name }}">
                             </a>
