@@ -1,6 +1,6 @@
 <div class="mt-10">
     <div class="flex mb-2 items-center gap-2 text-xs">
-        <h3>Comma-separated signatures</h3>
+        <h3>Signatures</h3>
         <a href="javascript:;" id="toggle-view" class="bg-black text-white p-1 rounded-full">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
         </a>

@@ -2,35 +2,50 @@
 
 @section('content')
 <div class="absolute top-4 right-4">
-    <x-links.default href="{{ route('sets.create') }}" label="Add new set"/>
-</div>
-<div class="md:flex mb-4">
-    <h2 class="text-2xl mb-2 md:w-1/2">
-        Sets
-    </h2>
+    <x-links.default href="{{ route('sets.quickCreate') }}" label="Quick Create"/>
+    <x-links.default href="{{ route('sets.create') }}" label="Expanded Form"/>
 </div>
 
-@php
-    $current = '';
-@endphp
-<div id="searchable-list">
-    <input class="search border-b border-black mb-8 focus:outline-none" placeholder="Search…"/>
-    <ul class="list">
-    @foreach ($sets as $set)
-        @if ($set->label)
-            @if ($current != $set->label[0])
-                @php
-                    $current = $set->label[0];
-                @endphp
-                <h2 class="text-2xl mt-2 mb-2">{{ $current }}</h2>
+<div class="flex">
+    <div class="w-2/3">
+        <h2 class="text-2xl mb-8">Sorted alphabetically</h2>
+        @php
+        $current = '';
+        @endphp
+        <div id="searchable-list">
+        <input class="search border-b border-black mb-8 focus:outline-none" placeholder="Search…"/>
+        <ul class="list">
+        @foreach ($sets as $set)
+            @if ($set->label)
+                @if ($current != $set->label[0])
+                    @php
+                        $current = $set->label[0];
+                    @endphp
+                    <h2 class="text-2xl mt-2 mb-2">{{ $current }}</h2>
+                @endif
+                <li class="inline">
+                    <x-links.default :label="$set->label" href="{{ route('sets.edit', [$set]) }}" class="mb-2 label"/>
+                </li>
             @endif
-            <li class="inline">
-                <x-links.default :label="$set->label" href="{{ route('sets.edit', [$set]) }}" class="mb-2 label"/>
-            </li>
-        @endif
-    @endforeach
-    </ul>
+        @endforeach
+        </ul>
+        </div>
+    </div>
+    <div class="w-1/3">
+        <h2 class="text-2xl mb-8">Sorted chronologicaly</h2>
+        <ul class="list">
+        @foreach ($sets_chron as $set)
+            @if ($set->label)
+                <li>
+                    <x-links.default :label="$set->label" href="{{ route('sets.edit', [$set]) }}" class="mb-2 label"/>
+                </li>
+            @endif
+        @endforeach
+        </ul>
+        </div>
+    </div>
 </div>
+
 @endsection
 
 @section('scripts')

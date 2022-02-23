@@ -25,7 +25,7 @@ class SetController extends Controller
      */
     public function create()
     {
-        return view('sets/create', ['collections' => Collection::all()]);
+        return view('sets/create');
     }
 
     /**
@@ -36,20 +36,10 @@ class SetController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->collection_id){
-            $collection = Collection::find($request->collection_id);
-        } else {
-            $collection = Collection::create([
-                'origin' => 'restoration',
-                'label' => $request->collection_label ?? $request->label
-            ]);
-        }
-
         $set = Set::create([
             'label' => $request->label,
             'description' => $request->description,
-            'signatures' => $request->signatures,
-            'collection_id' => $collection->id
+            'signatures' => $request->signatures
         ]);
 
         return redirect()->route('sets.edit', [$set]);
@@ -75,9 +65,7 @@ class SetController extends Controller
     public function edit($id)
     {
         return view('sets/update', [
-            'set' => Set::find($id),
-            'collection' => Set::find($id)->collection,
-            'collections' => Collection::all()
+            'set' => Set::find($id)
         ]);
     }
 
@@ -90,25 +78,51 @@ class SetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if($request->collection_id){
-            $collection = Collection::find($request->collection_id);
-        } else {
-            $collection = Collection::create([
-                'origin' => 'restoration',
-                'label' => $request->collection_label ?? $request->label
-            ]);
-        }
-
         $set = Set::find($id);
 
         $set->label = $request->label;
         $set->description = $request->description;
         $set->signatures = $request->signatures;
-        $set->collection_id = $collection->id;
 
         $set->save();
 
         return redirect()->route('sets.edit', [$set]);
+    }
+    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadDocuments(Request $request, $id)
+    {
+        $set = Set::find($id);
+
+        if($files = $request->file('documents')){
+            foreach($files as $file){
+
+                $label = implode('.', explode('.', $file->getClientOriginalName(), -1));
+                $original_file_name = $file->getClientOriginalName();
+                $file_name = time().'_'.$original_file_name;
+                $base_path = 'documents';
+
+                $document = $set->documents()->create([
+                    'label' => $label,
+                    'comment' => $request->comment,
+                    'file_name' => $file_name,
+                    'original_file_name' => $original_file_name,
+                    'base_path' => $base_path,
+                ]);
+
+                $file->storeAs(
+                    'public/'.$base_path, $file_name
+                );
+            }
+        }
+
+        return redirect()->route('sets.edit', [$set->id]);
     }
 
     /**
@@ -119,6 +133,59 @@ class SetController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Set::destroy($id);
+
+        return redirect('/');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function quickCreate()
+    {
+        return view('sets/quick-create');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function quickStore(Request $request)
+    {
+        $set = Set::create([
+            'label' => date('d.m.Y H:i'),
+            'description' => $request->description,
+            'signatures' => $request->signatures
+        ]);
+
+        $set->save();
+
+        if($files = $request->file('documents')){
+            foreach($files as $file){
+
+                $label = implode('.', explode('.', $file->getClientOriginalName(), -1));
+                $original_file_name = $file->getClientOriginalName();
+                $file_name = time().'_'.$original_file_name;
+                $base_path = 'documents';
+
+                $document = $set->documents()->create([
+                    'label' => $label,
+                    'comment' => $request->description,
+                    'file_name' => $file_name,
+                    'original_file_name' => $original_file_name,
+                    'base_path' => $base_path,
+                ]);
+
+                $file->storeAs(
+                    'public/'.$base_path, $file_name
+                );
+            }
+        }
+
+        return redirect('/');
     }
 }

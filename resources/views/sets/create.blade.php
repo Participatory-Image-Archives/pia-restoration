@@ -15,7 +15,6 @@
             @csrf
             
             @include('sets.set-meta')
-            @include('sets.set-collection')
             
             <div class="mt-10">
                 <button type="submit" class="py-1 px-4 bg-black text-white rounded-full">Save Set</button>

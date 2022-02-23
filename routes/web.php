@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SetController;
-use App\Http\Controllers\CollectionController;
 use App\Models\Set;
 
 /*
@@ -18,13 +17,17 @@ use App\Models\Set;
 */
 
 Route::get('/', function () {
-    return view('welcome', ['sets' => Set::all()]);
+    return view('welcome', [
+        'sets' => Set::all(),
+        'sets_chron' => Set::all()->sortBy('created_at')
+    ]);
 });
 
 Route::resource('sets', SetController::class);
-Route::resource('collections', CollectionController::class);
 
-Route::post('/collections/{id}/upload-image',
-    [CollectionController::class, 'uploadImage'])->name('collections.uploadImage');
-Route::post('/collections/{id}/upload-documents',
-    [CollectionController::class, 'uploadDocuments'])->name('collections.uploadDocuments');
+Route::post('/sets/{id}/upload-documents',
+    [SetController::class, 'uploadDocuments'])->name('sets.uploadDocuments');
+Route::get('/quick-reate',
+    [SetController::class, 'quickCreate'])->name('sets.quickCreate');
+Route::post('/quick-store',
+    [SetController::class, 'quickStore'])->name('sets.quickStore');
