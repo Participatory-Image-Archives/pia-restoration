@@ -19,7 +19,7 @@ use App\Models\Set;
 Route::get('/', function () {
     return view('welcome', [
         'sets' => Set::all(),
-        'sets_chron' => Set::all()->sortBy('created_at')
+        'sets_chron' => Set::all()->sortByDesc('created_at')
     ]);
 });
 
