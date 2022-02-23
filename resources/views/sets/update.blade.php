@@ -10,8 +10,8 @@
         <x-buttons.delete/>
     </form>
 </div>
-<div class="flex gap-10">
-    <div class="w-1/3">
+<div class="md:flex gap-10">
+    <div class="md:w-1/3">
         <h2 class="text-xl font-bold mb-8">1. Edit list of signatures</h2>
         <div>
             @include('sets.set-signatures')
@@ -30,7 +30,7 @@
 
     </div>
 
-    <div class="w-2/3 border-l border-gray-300 pl-8">
+    <div class="md:w-2/3 md:border-l border-gray-300 md:pl-8 mt-20 md:mt-0">
         <h2 class="text-xl font-bold mb-8">3. Add documents</h2>
         <div class="mb-10">
             <h2 class="text-xs mb-2">Documents</h2>

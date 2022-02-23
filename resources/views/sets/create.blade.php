@@ -4,8 +4,8 @@
 <div class="absolute top-4 right-4">
     <x-links.default href="/" label="Home"/>
 </div>
-<div class="flex gap-10">
-    <div class="w-1/3">
+<div class="md:flex gap-10">
+    <div class="md:w-1/3">
         <h2 class="text-xl font-bold mb-8">1. Edit list of signatures</h2>
         <div>
             @include('sets.set-signatures')

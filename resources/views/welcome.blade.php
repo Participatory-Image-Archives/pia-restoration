@@ -6,8 +6,20 @@
     <x-links.default href="{{ route('sets.create') }}" label="Expanded Form"/>
 </div>
 
-<div class="flex">
-    <div class="w-2/3">
+<div class="md:flex">
+    <div class="w-full md:w-1/3">
+        <h2 class="text-2xl mb-8">Sorted chronologicaly</h2>
+        <ul class="list">
+        @foreach ($sets_chron as $set)
+            @if ($set->label)
+                <li>
+                    <x-links.default :label="$set->label" href="{{ route('sets.edit', [$set]) }}" class="mb-2 label"/>
+                </li>
+            @endif
+        @endforeach
+        </ul>
+    </div>
+    <div class="w-full md:w-2/3">
         <h2 class="text-2xl mb-8">Sorted alphabetically</h2>
         @php
         $current = '';
@@ -29,20 +41,6 @@
             @endif
         @endforeach
         </ul>
-        </div>
-    </div>
-    <div class="w-1/3">
-        <h2 class="text-2xl mb-8">Sorted chronologicaly</h2>
-        <ul class="list">
-        @foreach ($sets_chron as $set)
-            @if ($set->label)
-                <li>
-                    <x-links.default :label="$set->label" href="{{ route('sets.edit', [$set]) }}" class="mb-2 label"/>
-                </li>
-            @endif
-        @endforeach
-        </ul>
-        </div>
     </div>
 </div>
 

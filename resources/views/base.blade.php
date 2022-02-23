@@ -13,9 +13,9 @@
 </head>
 <body>
 
-    <div class="p-8">
+    <div class="p-8 mt-8">
         <h1 class="font-bold text-3xl"><a href="/">PIA Restoration Sets</a></h1>
-        <p class="text-xs mb-20 w-1/2">A set is a number of SGV signatures that are attached to a collection. The set describes which objects belong to the collection. The collection then holds all the files, notes as well as documentation photos regarding the restoration process.</p>
+        <p class="text-xs mb-20 w-full md:w-1/2">A set is a number of SGV signatures that are attached to a collection. The set describes which objects belong to the collection. The collection then holds all the files, notes as well as documentation photos regarding the restoration process.</p>
 
         @yield('content')
 
