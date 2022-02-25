@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <div class="p-4" x-data="{ image_count: 0 }">
+    <div class="p-4">
         <form action="{{ route('sets.quickStore') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
@@ -22,26 +22,12 @@
 
             <div class="mb-8">
                 <h3 class="mb-2 text-xs">Photo(s)</h3>
-                <template x-for="i in image_count">
-                    <div class="image mb-4 pb-4 border-b border-gray-200" x-data>
-                        <input type="hidden" x-bind:name="`image_${i}`" x-bind:value="`${i}`">
-                        <input type="file" x-bind:name="`document_${i}`" class="mb-2" required
-                            onchange="show_preview(event)">
-                        <div class="mb-2">
-                            <img class="preview w-full max-w-xl">
-                        </div>
-                        <textarea x-bind:name="`comment_${i}`" class="w-full h-14 p-2 mb-2 border border-gray-100 bg-white shadow-xl overflow-hidden" oninput="auto_grow(this)"></textarea>
-                        <div class="text-right p-1">
-                            <button type="button" class="py-1 px-4 bg-red-500 text-white rounded-full text-xs"
-                    @click="$root.parentNode.removeChild($root)">Remove photo</button>
-                        </div>
-                    </div>
-                </template>
+                <div id="image_wrapper"></div>
             </div>
 
             <div class="mb-8">
                 <button type="button" class="py-1 px-4 bg-black text-white rounded-full"
-                    @click="image_count++">Add new photo</button>
+                    onclick="add_image()">Add new photo</button>
             </div>
             
             <div class="mb-8 text-right">
@@ -50,12 +36,30 @@
         </form>
     </div>
     
-    <a href="/" class="fixed bottom-4 right-4">
+    <a href="/" class="fixed bottom-4 left-4">
         <img class="w-10" src="{{ asset('pia-rat.svg') }}" alt="PIA Logo Rat">
     </a>
 
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <template id="image_template">
+        <div class="image mb-4 pb-4 border-b border-gray-200">
+            <input type="hidden" name="image_COUNT" value="COUNT">
+            <input type="file" name="document_COUNT" class="mb-2" required
+                onchange="show_preview(event)">
+            <div class="mb-2">
+                <img class="preview w-full max-w-xl">
+            </div>
+            <textarea name="comment_COUNT" class="w-full h-14 p-2 mb-2 border border-gray-100 bg-white shadow-xl overflow-hidden" oninput="auto_grow(this)"></textarea>
+            <div class="text-right p-1">
+                <button type="button" class="py-1 px-4 bg-red-500 text-white rounded-full text-xs"
+        onclick="remove_image(event)">Remove photo</button>
+            </div>
+        </div>
+    </template>
+
     <script>
+
+        let template = document.querySelector('#image_template'),
+            image_wrapper = document.querySelector('#image_wrapper');
 
         function auto_grow(element) {
             element.style.height = "5px";
@@ -69,25 +73,17 @@
             }
         }
 
-        /*
-            camera.addEventListener('change', function (e) {
-            var file = e.target.files[0];
-            console.log('file=' + URL.createObjectURL(file));
-            // Do something with the image file.
-            frame.src = URL.createObjectURL(file);
-            addImageToView(file)
-            });
+        function add_image() {
+            let img = document.createElement('div');
+            
+            img.innerHTML = template.innerHTML.replace(/COUNT/g, Date.now());
+            image_wrapper.appendChild(img);
+        }
 
-            function addImageToView(file) {
-            var photo_wrapper = $('<div class="col-6 col-sm-4 mb-3"><div/>'),
-                photo = $('<div class="rounded"><div/>');
-            photo.css({
-                'background-image': "url('" + URL.createObjectURL(file) + "')"
-            });
-            photo.addClass('cameraRoll');
-            cameraRoll.prepend(photo_wrapper.append(photo));
-            }
-        */
+        function remove_image(evt){
+            let target = evt.target.closest('.image');
+            target.parentNode.removeChild(target);
+        }
     
     </script>
 
