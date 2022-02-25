@@ -48,7 +48,7 @@
             <div class="mb-2">
                 <img class="preview w-full max-w-xl">
             </div>
-            <textarea name="comment_COUNT" class="w-full h-14 p-2 mb-2 border border-gray-100 bg-white shadow-xl overflow-hidden" oninput="auto_grow(this)"></textarea>
+            <textarea name="comment_COUNT" class="w-full h-14 p-2 mb-2 border border-gray-100 bg-white shadow-xl overflow-hidden" oninput="auto_grow(this)" placeholder="Comment"></textarea>
             <div class="text-right p-1">
                 <button type="button" class="py-1 px-4 bg-red-500 text-white rounded-full text-xs"
         onclick="remove_image(event)">Remove photo</button>
