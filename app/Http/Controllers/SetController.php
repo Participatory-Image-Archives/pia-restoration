@@ -164,7 +164,33 @@ class SetController extends Controller
 
         $set->save();
 
-        if($files = $request->file('documents')){
+        foreach($request->all() as $key => $input) {
+            if(strpos($key, 'image_') !== false){
+                $image_id = $request->input('image_'.$input);
+
+                if($request->file('document_'.$image_id)){
+                    $file = $request->file('document_'.$image_id);
+                    $label = implode('.', explode('.', $file->getClientOriginalName(), -1));
+                    $original_file_name = $file->getClientOriginalName();
+                    $file_name = time().'_'.$original_file_name;
+                    $base_path = 'documents';
+
+                    $document = $set->documents()->create([
+                        'label' => $label,
+                        'comment' => $request->input('comment_'.$image_id),
+                        'file_name' => $file_name,
+                        'original_file_name' => $original_file_name,
+                        'base_path' => $base_path,
+                    ]);
+
+                    $file->storeAs(
+                        'public/'.$base_path, $file_name
+                    );
+                }
+            }
+        }
+
+        /*if($files = $request->file('documents')){
             foreach($files as $file){
 
                 $label = implode('.', explode('.', $file->getClientOriginalName(), -1));
@@ -184,7 +210,7 @@ class SetController extends Controller
                     'public/'.$base_path, $file_name
                 );
             }
-        }
+        }*/
 
         return redirect('/');
     }

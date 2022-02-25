@@ -21,7 +21,7 @@
 
     </div>
     
-    <a href="/" class="fixed bottom-4 right-4">
+    <a href="/" class="fixed bottom-4 left-4">
         <img class="w-10" src="{{ asset('pia-rat.svg') }}" alt="PIA Logo Rat">
     </a>
 
