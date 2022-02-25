@@ -172,13 +172,13 @@ class SetController extends Controller
                     $file = $request->file('document_'.$image_id);
                     $label = implode('.', explode('.', $file->getClientOriginalName(), -1));
                     $original_file_name = $file->getClientOriginalName();
-                    $file_name = time().'_'.$original_file_name;
+                    $file_name = time().'_'.$this->gen_uuid().'_'.$original_file_name;
                     $base_path = 'documents';
 
                     $document = $set->documents()->create([
                         'label' => $label,
                         'comment' => $request->input('comment_'.$image_id),
-                        'file_name' => time().'__'.$file_name,
+                        'file_name' => $file_name,
                         'original_file_name' => $original_file_name,
                         'base_path' => $base_path,
                     ]);
@@ -191,5 +191,9 @@ class SetController extends Controller
         }
 
         return redirect('/');
+    }
+
+    protected function gen_uuid($l=6){
+        return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, $l);
     }
 }
