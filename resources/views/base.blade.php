@@ -11,7 +11,7 @@
     @yield('styles')
 
 </head>
-<body>
+<body class="overflow-x-hidden">
 
     <div class="p-8 mt-8">
         <h1 class="font-bold text-3xl"><a href="/">PIA Restoration Sets</a></h1>
