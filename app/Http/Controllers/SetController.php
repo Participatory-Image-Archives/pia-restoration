@@ -178,7 +178,7 @@ class SetController extends Controller
                     $document = $set->documents()->create([
                         'label' => $label,
                         'comment' => $request->input('comment_'.$image_id),
-                        'file_name' => $file_name,
+                        'file_name' => time().'__'.$file_name,
                         'original_file_name' => $original_file_name,
                         'base_path' => $base_path,
                     ]);
@@ -189,28 +189,6 @@ class SetController extends Controller
                 }
             }
         }
-
-        /*if($files = $request->file('documents')){
-            foreach($files as $file){
-
-                $label = implode('.', explode('.', $file->getClientOriginalName(), -1));
-                $original_file_name = $file->getClientOriginalName();
-                $file_name = time().'_'.$original_file_name;
-                $base_path = 'documents';
-
-                $document = $set->documents()->create([
-                    'label' => $label,
-                    'comment' => $request->description,
-                    'file_name' => $file_name,
-                    'original_file_name' => $original_file_name,
-                    'base_path' => $base_path,
-                ]);
-
-                $file->storeAs(
-                    'public/'.$base_path, $file_name
-                );
-            }
-        }*/
 
         return redirect('/');
     }
