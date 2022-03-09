@@ -1,7 +1,7 @@
 @extends('base')
 
 @section('content')
-    <div>
+    <div class="overflow-x-hidden">
         <form action="{{ route('sets.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 

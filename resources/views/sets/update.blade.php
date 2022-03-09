@@ -1,7 +1,7 @@
 @extends('base')
 
 @section('content')
-    <div>
+    <div class="overflow-x-hidden">
         <form action="{{ route('sets.update', $set) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('put')
