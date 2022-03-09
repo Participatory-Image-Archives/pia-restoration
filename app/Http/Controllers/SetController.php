@@ -150,6 +150,7 @@ class SetController extends Controller
                     }
 
                     $document->label = $label;
+                    $document->comment = $request->input('comment_'.$image_tempid);
                     $document->file_name = $file_name;
                     $document->original_file_name = $original_file_name;
                     $document->base_path = $base_path;
@@ -160,7 +161,8 @@ class SetController extends Controller
                     $ids[] = $document->id;
                 }
 
-                if($request->input('comment_'.$image_tempid) != '') {
+                // in case we just need to change the comment of an existing image
+                if($request->input('comment_'.$image_tempid) != '' && $image_id != '') {
                     $document = Document::find($image_id);
                     $document->comment = $request->input('comment_'.$image_tempid);
                     $document->save();
