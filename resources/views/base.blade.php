@@ -11,15 +11,12 @@
     @yield('styles')
 
 </head>
-<body class="overflow-x-hidden">
+<body class="overflow-x-hidden p-4">
 
-    <div class="p-4">
-        <h1 class="font-bold text-3xl"><a href="/">PIA Restoration</a></h1>
-        <p class="text-xs mb-4 w-full md:w-1/2">Mit diesem Werkzeug lassen sich Notizen, Fotos und andere Dokumente an Signaturen hängen. Ein zukünftigen Werkzeug wird diese Signaturen auslesen und die Dokumente mit den digitalisierten Objekten verknüpfen.</p>
+    <h1 class="font-bold text-3xl"><a href="/">PIA Restoration</a></h1>
+    <p class="text-xs mb-4 w-full md:w-1/2">Mit diesem Werkzeug lassen sich Notizen, Fotos und andere Dokumente an Signaturen hängen. Ein zukünftigen Werkzeug wird diese Signaturen auslesen und die Dokumente mit den digitalisierten Objekten verknüpfen.</p>
 
-        @yield('content')
-
-    </div>
+    @yield('content')
     
     <a href="/" class="fixed top-2 right-2">
         <img class="w-10" src="{{ asset('pia-rat.svg') }}" alt="PIA Logo Rat">
