@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Collection;
+use App\Models\Document;
 use App\Models\Set;
 
 class SetController extends Controller
@@ -36,13 +37,19 @@ class SetController extends Controller
      */
     public function store(Request $request)
     {
+        date_default_timezone_set('Europe/Berlin');
+
         $set = Set::create([
-            'label' => $request->label,
+            'label' => date('d.m.Y H:i'),
             'description' => $request->description,
             'signatures' => $request->signatures
         ]);
 
-        return redirect()->route('sets.edit', [$set]);
+        $set->save();
+
+        $this->attach_images($request, $set);
+
+        return redirect('/');
     }
 
     /**
@@ -80,49 +87,14 @@ class SetController extends Controller
     {
         $set = Set::find($id);
 
-        $set->label = $request->label;
         $set->description = $request->description;
         $set->signatures = $request->signatures;
 
         $set->save();
 
-        return redirect()->route('sets.edit', [$set]);
-    }
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function uploadDocuments(Request $request, $id)
-    {
-        $set = Set::find($id);
+        $this->attach_images($request, $set);
 
-        if($files = $request->file('documents')){
-            foreach($files as $file){
-
-                $label = implode('.', explode('.', $file->getClientOriginalName(), -1));
-                $original_file_name = $file->getClientOriginalName();
-                $file_name = time().'_'.$original_file_name;
-                $base_path = 'documents';
-
-                $document = $set->documents()->create([
-                    'label' => $label,
-                    'comment' => $request->comment,
-                    'file_name' => $file_name,
-                    'original_file_name' => $original_file_name,
-                    'base_path' => $base_path,
-                ]);
-
-                $file->storeAs(
-                    'public/'.$base_path, $file_name
-                );
-            }
-        }
-
-        return redirect()->route('sets.edit', [$set->id]);
+        return redirect('/');
     }
 
     /**
@@ -138,59 +110,71 @@ class SetController extends Controller
         return redirect('/');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function quickCreate()
-    {
-        return view('sets/quick-create');
-    }
+    protected function attach_images($request, $set) {
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function quickStore(Request $request)
-    {
-        $set = Set::create([
-            'label' => date('d.m.Y H:i'),
-            'description' => $request->description,
-            'signatures' => $request->signatures
-        ]);
+        /**
+         * 1. go through all form fields and check if a key contains 'image_'
+         *    we take the tempid/link to the connected form fields from that
+         * 2. check if we already have a document id
+         *      - if no, create a new document
+         *      - if yes, replace the old one, if a new file is provided
+         * 3. last but not least, remove documents that were deleted
+         */
 
-        $set->save();
+        $ids = [];
 
         foreach($request->all() as $key => $input) {
             if(strpos($key, 'image_') !== false){
-                $image_id = $request->input('image_'.$input);
 
-                if($request->file('document_'.$image_id)){
-                    $file = $request->file('document_'.$image_id);
+                // 1. get image tempid
+                $image_tempid = $request->input('image_'.$input);
+
+                // 2. check if the document already exists
+                $image_id = $request->input('id_'.$image_tempid);
+
+                if($request->file('document_'.$image_tempid)){
+                    $file = $request->file('document_'.$image_tempid);
                     $label = implode('.', explode('.', $file->getClientOriginalName(), -1));
                     $original_file_name = $file->getClientOriginalName();
                     $file_name = time().'_'.$this->gen_uuid().'_'.$original_file_name;
-                    $base_path = 'documents';
-
-                    $document = $set->documents()->create([
-                        'label' => $label,
-                        'comment' => $request->input('comment_'.$image_id),
-                        'file_name' => $file_name,
-                        'original_file_name' => $original_file_name,
-                        'base_path' => $base_path,
-                    ]);
+                    $base_path = 'restoration';
 
                     $file->storeAs(
                         'public/'.$base_path, $file_name
                     );
+
+                    if($image_id != '') {
+                        $document = Document::find($image_id);
+                    } else {
+                        $document = $set->documents()->create();
+                    }
+
+                    $document->label = $label;
+                    $document->file_name = $file_name;
+                    $document->original_file_name = $original_file_name;
+                    $document->base_path = $base_path;
+
+                    $document->save();
+
+                    // add image id to worked on ids to check
+                    $ids[] = $document->id;
+                }
+
+                if($request->input('comment_'.$image_tempid) != '') {
+                    $document = Document::find($image_id);
+                    $document->comment = $request->input('comment_'.$image_tempid);
+                    $document->save();
+                }
+                
+                // add to worked on ids if image exists but wasn't exchanged
+                if(!$request->file('document_'.$image_tempid) && $image_id != '') {
+                    $ids[] = $image_id;
                 }
             }
         }
 
-        return redirect('/');
+        // 3. just sync the worked on images, forgetting the rest
+        $set->documents()->sync($ids);
     }
 
     protected function gen_uuid($l=6){

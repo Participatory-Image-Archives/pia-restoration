@@ -1,36 +1,25 @@
 @extends('base')
 
 @section('content')
-<div class="absolute top-4 right-4">
-    <x-links.default href="/" label="Home"/>
-</div>
-<div class="md:flex gap-10">
-    <div class="md:w-1/3">
-        <h2 class="text-xl font-bold mb-8">1. Edit list of signatures</h2>
-        <div>
-            @include('sets.set-signatures')
-        </div>
-        <form action="{{ route('sets.store') }}" method="POST">
-        
+    <div>
+        <form action="{{ route('sets.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            
-            @include('sets.set-meta')
-            
-            <div class="mt-10">
-                <button type="submit" class="py-1 px-4 bg-black text-white rounded-full">Save Set</button>
+
+            @include('sets.partials.update-meta')
+
+            <div class="mb-8">
+                <h3 class="mb-2 font-bold">Fotos</h3>
+                <div id="image_wrapper"></div>
             </div>
+
+            @include('sets.partials.update-actions')
         </form>
-
     </div>
-</div>
 
-<script>
+    <template id="image_template">
+        @include('sets.partials.update-image')
+    </template>
 
-    function auto_grow(element) {
-        element.style.height = "5px";
-        element.style.height = (element.scrollHeight)+"px";
-    }
-
-</script>
+    @include('sets.partials.update-scripts')
 
 @endsection
