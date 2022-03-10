@@ -41,8 +41,9 @@ class SetController extends Controller
 
         $set = Set::create([
             'label' => date('d.m.Y H:i'),
+            'signatures' => $request->signatures,
+            'origin' => $request->origin,
             'description' => $request->description,
-            'signatures' => $request->signatures
         ]);
 
         $set->save();
@@ -87,8 +88,9 @@ class SetController extends Controller
     {
         $set = Set::find($id);
 
-        $set->description = $request->description;
         $set->signatures = $request->signatures;
+        $set->origin = $request->origin;
+        $set->description = $request->description;
 
         $set->save();
 
@@ -162,7 +164,7 @@ class SetController extends Controller
                 }
 
                 // in case we just need to change the comment of an existing image
-                if($request->input('comment_'.$image_tempid) != '' && $image_id != '') {
+                if($image_id != '') {
                     $document = Document::find($image_id);
                     $document->comment = $request->input('comment_'.$image_tempid);
                     $document->save();

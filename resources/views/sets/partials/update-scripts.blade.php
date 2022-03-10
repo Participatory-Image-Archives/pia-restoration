@@ -5,6 +5,16 @@
             el.style.height = "5px";
             el.style.height = (el.scrollHeight)+"px";
         })
+    
+        let origin = document.querySelector('[name="origin"]');
+
+        if(origin.value == '' && localStorage.getItem('origin') != '') {
+            origin.value = localStorage.getItem('origin');
+        }
+
+        origin.addEventListener('change', () => {
+            localStorage.setItem('origin', origin.value);
+        })
     })
 
     let template = document.querySelector('#image_template'),
