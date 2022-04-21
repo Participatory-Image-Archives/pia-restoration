@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Collection;
 use App\Models\Document;
-use App\Models\Set;
+use App\Models\Aggregation;
 
-class SetController extends Controller
+class AggregationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +26,7 @@ class SetController extends Controller
      */
     public function create()
     {
-        return view('sets/create');
+        return view('aggregations/create');
     }
 
     /**
@@ -39,16 +39,16 @@ class SetController extends Controller
     {
         date_default_timezone_set('Europe/Berlin');
 
-        $set = Set::create([
+        $aggregation = Aggregation::create([
             'label' => date('d.m.Y H:i'),
             'signatures' => $request->signatures,
             'origin' => $request->origin,
             'description' => $request->description,
         ]);
 
-        $set->save();
+        $aggregation->save();
 
-        $this->attach_images($request, $set);
+        $this->attach_images($request, $aggregation);
 
         return redirect('/');
     }
@@ -72,8 +72,8 @@ class SetController extends Controller
      */
     public function edit($id)
     {
-        return view('sets/update', [
-            'set' => Set::find($id)
+        return view('aggregations/update', [
+            'aggregation' => Aggregation::find($id)
         ]);
     }
 
@@ -86,15 +86,15 @@ class SetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $set = Set::find($id);
+        $aggregation = Aggregation::find($id);
 
-        $set->signatures = $request->signatures;
-        $set->origin = $request->origin;
-        $set->description = $request->description;
+        $aggregation->signatures = $request->signatures;
+        $aggregation->origin = $request->origin;
+        $aggregation->description = $request->description;
 
-        $set->save();
+        $aggregation->save();
 
-        $this->attach_images($request, $set);
+        $this->attach_images($request, $aggregation);
 
         return redirect('/');
     }
@@ -107,12 +107,12 @@ class SetController extends Controller
      */
     public function destroy($id)
     {
-        Set::destroy($id);
+        Aggregation::destroy($id);
 
         return redirect('/');
     }
 
-    protected function attach_images($request, $set) {
+    protected function attach_images($request, $aggregation) {
 
         /**
          * 1. go through all form fields and check if a key contains 'image_'
@@ -148,7 +148,7 @@ class SetController extends Controller
                     if($image_id != '') {
                         $document = Document::find($image_id);
                     } else {
-                        $document = $set->documents()->create();
+                        $document = $aggregation->documents()->create();
                     }
 
                     $document->label = $label;
@@ -178,7 +178,7 @@ class SetController extends Controller
         }
 
         // 3. just sync the worked on images, forgetting the rest
-        $set->documents()->sync($ids);
+        $aggregation->documents()->sync($ids);
     }
 
     protected function gen_uuid($l=6){

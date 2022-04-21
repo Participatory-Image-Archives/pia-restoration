@@ -2,17 +2,17 @@
 
 @section('content')
     <div class="overflow-x-hidden">
-        <form action="{{ route('sets.update', $set) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('aggregations.update', $aggregation) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('put')
 
-            @include('sets.partials.update-meta')
+            @include('aggregations.partials.update-meta')
 
             <div class="mb-8">
                 <h3 class="mb-2 font-bold">Fotos</h3>
                 <div id="image_wrapper">
-                    @foreach ($set->documents as $image)
-                        @include('sets.partials.update-image', [
+                    @foreach ($aggregation->documents as $image)
+                        @include('aggregations.partials.update-image', [
                             'datenow' => time() . '_' . $loop->index,
                             'img' => $image
                         ])
@@ -20,20 +20,20 @@
                 </div>
             </div>
 
-            @include('sets.partials.update-actions')
+            @include('aggregations.partials.update-actions')
         </form>
     </div>
 
-    <form action="{{ route('sets.destroy', [$set]) }}" method="post">
+    <form action="{{ route('aggregations.destroy', [$aggregation]) }}" method="post">
         @csrf
         @method('delete')
         <x-buttons.delete/>
     </form>
 
     <template id="image_template">
-        @include('sets.partials.update-image')
+        @include('aggregations.partials.update-image')
     </template>
 
-    @include('sets.partials.update-scripts')
+    @include('aggregations.partials.update-scripts')
 
 @endsection

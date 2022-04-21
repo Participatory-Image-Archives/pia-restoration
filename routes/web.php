@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\SetController;
-use App\Models\Set;
+use App\Http\Controllers\AggregationController;
+use App\Models\Aggregation;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,16 +18,16 @@ use App\Models\Set;
 
 Route::get('/', function () {
     return view('welcome', [
-        'sets' => Set::all(),
-        'sets_chron' => Set::all()->sortByDesc('created_at')
+        'aggregation' => Aggregation::all(),
+        'aggregations_chron' => Aggregation::all()->sortByDesc('created_at')
     ]);
 });
 
-Route::resource('sets', SetController::class);
+Route::resource('aggregations', AggregationController::class);
 
 Route::post('/sets/{id}/upload-documents',
-    [SetController::class, 'uploadDocuments'])->name('sets.uploadDocuments');
+    [AggregationController::class, 'uploadDocuments'])->name('aggregations.uploadDocuments');
 Route::get('/quick-reate',
-    [SetController::class, 'quickCreate'])->name('sets.quickCreate');
+    [AggregationController::class, 'quickCreate'])->name('aggregations.quickCreate');
 Route::post('/quick-store',
-    [SetController::class, 'quickStore'])->name('sets.quickStore');
+    [AggregationController::class, 'quickStore'])->name('aggregations.quickStore');
